@@ -6,6 +6,7 @@
 </template>
 
 <script>
+import { engineRun, rawRun } from '@/process/engineJs/index.js'
 
 export default {
   name: 'HelloWorld',
@@ -18,7 +19,9 @@ export default {
     }
   },
   methods: {
-    onClick: function () {      
+    onClick: function () {  
+      const get = rawRun(this.text)
+      console.log('get', get)    
     }
   }
 };

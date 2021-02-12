@@ -9,7 +9,6 @@ function execScript (body, array, preLocal) {
   // output {name: name, value: value}
   let local = {}
   if (preLocal) {
-    // console.lo('local', local, preLocal)
     local = Object.assign(local, preLocal)
   }
   const localInfo = {}
@@ -21,15 +20,12 @@ function execScript (body, array, preLocal) {
       local[body.params[i].name] = array[i]
     }
   }
-  // console.lo('array', array, local)
   for (let key of Object.keys(local || {})) {
-    // console.lo('output', local[key])
   }
   //
   //
   // 実際に読み込む
   //
-  // console.lo('body', body)
   if (body.body && body.body.type === 'BlockStatement') {
     access = body.body
   }
@@ -65,7 +61,7 @@ function execScript (body, array, preLocal) {
         }
         break
       case 'ExpressionStatement':
-        // console.lo('argument', access.body[i])
+        // console.log('gett', access.body[i])
         if (access.body[i].expression && access.body[i].expression.type === 'CallExpression') {
           const target = access.body[i].expression.callee
           if (target.object && target.object.type === 'ThisExpression') {
@@ -77,25 +73,20 @@ function execScript (body, array, preLocal) {
               args.push(getProperty(getRawArgs[i], local))
             }
             getProperty(target, local, args)
-            // console.log('getter', getter, args)
           }
         } else if (access.body[i].expression && access.body[i].expression.type === 'AssignmentExpression') {
-          // console.log('functionExpress::!!!:assign', body, array, preLocal)
-          // console.lo('chhhhhh', access.body[i].expression)
           if (access.body[i].expression.left.name && local.hasOwnProperty(access.body[i].expression.left.name)) {
-            local[access.body[i].expression.left.name] = calculation(access.body[i].expression.right, local)
-            // console.lo('checcer', calculation(access.body[i].expression.right, local))
+            local[access.body[i].expression.left.name] = assignCalculate(access.body[i].expression.operator, local[access.body[i].expression.left.name], calculation(access.body[i].expression.right, local))
           } else if (access.body[i].expression.left.property && access.body[i].expression.left.property.name) {
-            global[access.body[i].expression.left.property.name] = calculation(access.body[i].expression.right, local)
+            // console.log('preGlobal', global)
+            global[access.body[i].expression.left.property.name] = assignCalculate(access.body[i].expression.operator, calculation(access.body[i].expression.right, local), calculation(access.body[i].expression.right, local))
+            // console.log('nextGlobal', global)
           }
         } else if (access.body[i].expression && access.body[i].expression.type === 'UpdateExpression') {
-          // console.lo('update:argument')
           const targetUpate = access.body[i].expression.argument
           if (targetUpate.name && local.hasOwnProperty(targetUpate.name)) {
-            // console.lo('update:argument:local', calculation(targetUpate, local))
             local[targetUpate.name] = calculation(access.body[i].expression, local)
           } else if (targetUpate.name && global.hasOwnProperty(targetUpate.name)) {
-            // console.lo('update:argument:glbal')
             global[targetUpate.name] = calculation(access.body[i].expression, local)
           }
         }
@@ -112,7 +103,6 @@ function execScript (body, array, preLocal) {
           // argument?
           updateCalculation = target.update
         }
-        // console.lo('update', readyupdate)
         let updateName = ''
         if (readyupdate.left) {
           updateName = readyupdate.left.name
@@ -122,7 +112,6 @@ function execScript (body, array, preLocal) {
         }
         // const updateName = readyupdate.left.name
         const readyBool = target.test
-        // console.lo('isBool(readyBool, { ...local, [initName]: initIndex })', isBool(readyBool, { ...local, [initName]: initIndex }))
         while (isBool(readyBool, { ...local, [initName]: initIndex })) {
           let get = execScript(target.body, array, { ...local, [initName]: initIndex })
           Object.keys(get.returnLocal || {}).forEach(key => {
@@ -185,16 +174,15 @@ function execScript (body, array, preLocal) {
         break
       case 'ReturnStatement':
         const argument = access.body[i].argument
-        let outputReturn = { returnArguments: {}, returnLocal: { ...preLocal }, returnOrder: 'return' }
+        let outputReturn = { returnArguments: {}, returnLocal: { ...preLocal }, returnOrder: 'return', global: global}
         const returnData = getProperty(argument, local)
         outputReturn.returnArguments = returnData
-        // console.lo('getter', outputReturn, argument, returnData, local)
         Object.keys(preLocal || {}).forEach(key => {
           outputReturn.returnLocal[key] = local[key]
         })
         return outputReturn
       case 'ContinueStatement':
-        let ContinueOutput = { returnArguments: {}, returnLocal: { ...preLocal }, returnOrder: 'break' }
+        let ContinueOutput = { returnArguments: {}, returnLocal: { ...preLocal }, returnOrder: 'break', global: global}
         Object.keys(preLocal || {}).forEach(key => {
           ContinueOutput.returnLocal[key] = local[key]
         })
@@ -205,11 +193,9 @@ function execScript (body, array, preLocal) {
         const discriminantValue = getProperty(discriminant, local)
         for (let takeCase of cases) {
           const testValue = getProperty(takeCase.test, local)
-          // console.lo('discriminantValue', discriminantValue, 'testValue', testValue)
           if (!testValue) {
             // maybeDefault
             const get = execScript(takeCase, array, local)
-            // console.lo('switchGet', get)
             if (get.returnOrder === 'break') {
               break
             }
@@ -217,13 +203,9 @@ function execScript (body, array, preLocal) {
           }
           const createBool = scriptCreateAST(String(discriminantValue) + '===' + String(testValue)).expression
           const check = isBool(createBool, local)
-          // console.lo('checkerr', check, createBool)
-          // console.lo('checker', createBool)
           if (check) {
             // このケースに該当する
-            // console.lo('bbo', createBool)
             const get = execScript(takeCase, array, local)
-            // console.lo('switchGet', get)
             if (get.returnOrder === 'break') {
               break
             }
@@ -232,14 +214,32 @@ function execScript (body, array, preLocal) {
         break
     }
   }
-  let output = { returnArguments: {}, returnLocal: { ...preLocal }, returnOrder: 'end' }
+  let output = { returnArguments: {}, returnLocal: { ...preLocal }, returnOrder: 'end', global: global}
   Object.keys(preLocal || {}).forEach(key => {
     output.returnLocal[key] = local[key]
   })
 
   return output
 }
-
+function assignCalculate (operator, leftValue, rightValue) {
+  switch (operator) {
+    case '+=':
+      return leftValue + rightValue
+    case '-=':
+      return leftValue - rightValue
+    case '/=':
+      return leftValue / rightValue
+    case '*=':
+      return leftValue * rightValue
+    case '%=':
+      return leftValue % rightValue
+    case '**=':
+      return leftValue ** rightValue
+    case '=':
+      return rightValue
+  }
+  return rightValue
+}
 function calculation (body, local, params, err, type) {
   if (err) {
     return 'err'
