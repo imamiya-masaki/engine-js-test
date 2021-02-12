@@ -1,11 +1,12 @@
 <template>
   <div class="hello">
-    <textarea v-model="text" />
+    <textarea v-model="text" class="textSize"/>
     <button @click="onClick()">実行</button>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'HelloWorld',
   props: {
@@ -38,5 +39,9 @@ li {
 }
 a {
   color: #42b983;
+}
+.textSize {
+  width: 500px;
+  height: 300px;
 }
 </style>
