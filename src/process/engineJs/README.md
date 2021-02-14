@@ -1,10 +1,9 @@
 #readme
 
-1.
 An easy way to execute Javascript source code made up of strings.
 
-import { rawRun } from 'exec-engine-js'
-let exec = rawRun(strings)
+    import { rawRun } from 'exec-engine-js'
+    let exec = rawRun(strings)
 
 example.
 
@@ -14,3 +13,9 @@ example.
     let exec =  rawRun(strings)
     console.log(strings) // 30
     console.log(typeof strings) //number
+
+
+
+
+If you have any bugs or requests, please contact us
+https://github.com/imamiya-masaki/engine-js-test
