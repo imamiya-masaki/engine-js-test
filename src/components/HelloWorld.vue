@@ -23,7 +23,7 @@ export default {
       // let exec = require('exec-engine-js')
       const get = rawRun(this.text)
       // const get = exec.rawRun(this.text)
-      console.log('get', get)
+      console.log('get', get, typeof get)
     }
   }
 };
