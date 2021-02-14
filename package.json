@@ -10,6 +10,7 @@
   "dependencies": {
     "@babel/parser": "^7.12.15",
     "core-js": "^3.6.5",
+    "exec-engine-js": "^0.0.4",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuex": "^3.4.0"
@@ -77,7 +78,9 @@
       "eqeqeq": "off",
       "max-classes-per-file": "off",
       "no-empty": "off",
-      "no-fallthrough": "off"
+      "no-fallthrough": "off",
+      "no-else-return": "off",
+      "no-lonely-if": "off"
     }
   },
   "browserslist": [
