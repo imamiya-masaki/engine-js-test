@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import { engineRun, rawRun } from '@/process/engineJs/index.js'
-
+import { engineRun } from '@/process/engineJs/index.js'
+import { rawRun } from 'exec-engine-js'
 export default {
   name: 'HelloWorld',
   props: {
@@ -20,8 +20,10 @@ export default {
   },
   methods: {
     onClick: function () {  
+      // let exec = require('exec-engine-js')
       const get = rawRun(this.text)
-      console.log('get', get)    
+      // const get = exec.rawRun(this.text)
+      console.log('get', get)
     }
   }
 };

@@ -1,4 +1,4 @@
-import { global } from '../moduleProcess.js'
+import { global } from './index.js'
 import { execScript, getScript } from './execScript.js'
 export { CheckProperty, getProperty }
 // データの代入を支援するfunction {name: value}の形で返される
