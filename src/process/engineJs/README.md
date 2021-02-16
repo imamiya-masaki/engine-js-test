@@ -11,8 +11,8 @@ example.
 
     let strings = "let a = 30 \n return a"
     let exec =  rawRun(strings)
-    console.log(strings) // 30
-    console.log(typeof strings) //number
+    console.log(exec) // 30
+    console.log(typeof exec) //number
 
 
 
