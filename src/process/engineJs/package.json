@@ -1,6 +1,6 @@
 {
   "name": "exec-engine-js",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "String型のjsを安全に（？）実行するモジュール",
   "main": "index.js",
   "scripts": {
