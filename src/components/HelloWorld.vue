@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import { engineRun } from '@/process/engineJs/index.js'
-import { rawRun } from 'exec-engine-js'
+import { engineRun, rawRun} from '@/process/engineJs/index.js'
+// import { rawRun } from 'exec-engine-js'
 export default {
   name: 'HelloWorld',
   props: {

@@ -42,7 +42,7 @@ function execScript (body, array, preLocal) {
     if (!access || !access.body[i] || !access.body[i].type) {
       continue
     }
-
+    console.log('gett', access.body[i])
     switch (access.body[i].type) {
       // 宣言
       case 'VariableDeclaration':

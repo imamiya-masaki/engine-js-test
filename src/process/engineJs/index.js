@@ -1,5 +1,6 @@
 import { getScript, execScript, isBool } from './execScript'
 let global = {}
+let console = {}
 class Global {
   constructor () {
     this.global = {}
@@ -14,8 +15,9 @@ class Global {
 class Engine {
   // いずれ関数受け渡しも実装したいため
   // 現状は関数受け渡しは不可能
-  constructor(mainText, ...args) {
+  constructor(mainText, mainName, ...args) {
     this.mainText = mainText
+    this.mainName = mainName
     this.babelText = this.babelParse(mainText)
   }
   set preLocal (local) {
@@ -34,7 +36,7 @@ class Engine {
 function globalClear () {
   this.global = {}
 }
-function engineRun (mainText, ...args) {
+function engineRun (mainText, mainName, ...args) {
   return (new Engine(mainText).run(...args))
 }
 function rawRun (mainText) {
@@ -53,6 +55,6 @@ function babelAST (script) {
   }
 }
 
-export { engineRun, rawRun, global }
+export { engineRun, rawRun, global, console }
 
 
