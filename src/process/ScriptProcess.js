@@ -39,6 +39,5 @@ export default function (text, props) {
 }
 
 function strict (text) {
-  'use strict'
   eval(text)
 }
