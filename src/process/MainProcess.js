@@ -1,4 +1,5 @@
 // import DomProcess from './DomProcess.js'
+import { earth, pageAdd } from '@/process/ProjectProcess.js'
 import CreateAST from './CreateAST.js'
 import ScriptProcess from './ScriptProcess.js'
 import DomProcess from './DomProcess.js'
@@ -6,7 +7,6 @@ import { global } from './moduleProcess.js'
 import { domProperty } from './ScriptUtility/domUtility.js'
 import { execScript, getScript } from './ScriptUtility/execScript.js'
 import { styleProperty } from './styleProcess.js'
-import { earth, pageAdd } from '@/process/ProjectProcess.js'
 let globalStyle = {}
 let lastOutput = []
 let checkClear = 0
